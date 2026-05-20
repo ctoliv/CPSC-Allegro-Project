@@ -36,6 +36,8 @@ int main(int argc, char** argv)
     al_draw_filled_circle(500, 120, 2, al_map_rgb(255, 255, 255));
     al_draw_filled_circle(600, 180, 3, al_map_rgb(255, 255, 255));
 
+    //Grass
+    al_draw_filled_rectangle(0, 500, 800, 600, al_map_rgb(20, 120, 40));
 
     //House body
     al_draw_filled_rectangle(250, 300, 550, 500, al_map_rgb(160, 90, 50));
@@ -60,6 +62,7 @@ int main(int argc, char** argv)
     al_draw_line(485, 340, 485, 400, al_map_rgb(0, 0, 0), 2);
     al_draw_line(455, 370, 515, 370, al_map_rgb(0, 0, 0), 2);
 
+
     //Tree trunk
     al_draw_filled_rectangle(110, 350, 150, 500, al_map_rgb(100, 55, 25));
 
@@ -69,9 +72,10 @@ int main(int argc, char** argv)
     al_draw_filled_circle(170, 350, 50, al_map_rgb(30, 130, 40));
 
 
-
+    //Show screen
     al_flip_display();
 
+    //Display for 20 seconds
     al_rest(20.0);
 
     al_destroy_display(display);
