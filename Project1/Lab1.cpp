@@ -23,6 +23,7 @@ int main(int argc, char** argv)
     //needed for drawing primitives like rectangles, cricles, etc.
     al_init_primitives_addon();
 
+    //Background color
     al_clear_to_color(al_map_rgb(0, 0, 0));
 
     //Moon
