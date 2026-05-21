@@ -8,22 +8,31 @@ void draw_player(int x, int y, int direction);
 
 int main(int argc, char** argv)
 {
-
+    // Allegro display and event queue pointers
     ALLEGRO_DISPLAY* display = NULL;
     ALLEGRO_EVENT_QUEUE* event_queue = NULL;
+    // Start Allegro
     if (!al_init())
     {
         fprintf(stderr, "failed to initialize allegro!\n");
         return -1;
     }
-    
+    // Set screen size and starting player position
     int width = 800;
     int height = 600;
     int playerX = width / 2;
     int playerY = height / 2;
+
+    // Direction controls where the pointer faces
     int direction = 0;
+
+    // Amount the object moves each key press
     int moveAmount = 25;
+
+    // Controls when the game loop stops
     bool done = false;
+
+    // Create the display window
     display = al_create_display(width, height);
 
     if (!display)
@@ -32,12 +41,14 @@ int main(int argc, char** argv)
         return -1;
     }
 
+    // Install keyboard support
     if (!al_install_keyboard())
     {
         fprintf(stderr, "failed to install keyboard!\n");
         return -1;
     }
 
+    // Create the event queue
     event_queue = al_create_event_queue();
 
     if (!event_queue)
@@ -46,16 +57,19 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    
+    // Register keyboard and display events
     al_register_event_source(event_queue, al_get_keyboard_event_source());
     al_register_event_source(event_queue, al_get_display_event_source(display));
+
+    // Enable primitive drawing
     al_init_primitives_addon();
 
+    // Draw the starting screen
     draw_background();
     draw_player(playerX, playerY, direction);
-
-
     al_flip_display();
+
+    // Main event loop
     while (!done)
     {
         ALLEGRO_EVENT ev;
@@ -72,7 +86,7 @@ int main(int argc, char** argv)
             case ALLEGRO_KEY_ESCAPE:
                 done = true;
                 break;
-
+            // Arrow key movement
             case ALLEGRO_KEY_UP:
                 playerY -= moveAmount;
                 direction = 0;
@@ -92,6 +106,7 @@ int main(int argc, char** argv)
                 playerX -= moveAmount;
                 direction = 3;
                 break;
+            // Diagonal movement
             case ALLEGRO_KEY_U:
                 playerX -= moveAmount;
                 playerY -= moveAmount;
@@ -117,26 +132,28 @@ int main(int argc, char** argv)
                 break;
 
             }
+            // Redraw background to erase the old object
             draw_background();
+            // Draw object in the new position
             draw_player(playerX, playerY, direction);
 
-
+            // Show updated screen
             al_flip_display();
         }
     }
-
+    // Clean up memory before ending program
     al_destroy_event_queue(event_queue);
     al_destroy_display(display);
 
     return 0;
 }
-
+// Draws the background each time the screen refreshes
 void draw_background()
 {
     al_clear_to_color(al_map_rgb(15, 15, 35));
     al_draw_line(0, 500, 800, 500, al_map_rgb(80, 80, 120), 3);
 }
-
+// Draws the player object and changes the pointer direction
 void draw_player(int x, int y, int direction)
 {
     // Body
