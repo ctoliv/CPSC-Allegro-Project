@@ -92,6 +92,30 @@ int main(int argc, char** argv)
                 playerX -= moveAmount;
                 direction = 3;
                 break;
+            case ALLEGRO_KEY_U:
+                playerX -= moveAmount;
+                playerY -= moveAmount;
+                direction = 4;
+                break;
+
+            case ALLEGRO_KEY_D:
+                playerX += moveAmount;
+                playerY += moveAmount;
+                direction = 5;
+                break;
+
+            case ALLEGRO_KEY_R:
+                playerX += moveAmount;
+                playerY -= moveAmount;
+                direction = 6;
+                break;
+
+            case ALLEGRO_KEY_L:
+                playerX -= moveAmount;
+                playerY += moveAmount;
+                direction = 7;
+                break;
+
             }
             draw_background();
             draw_player(playerX, playerY, direction);
@@ -135,6 +159,22 @@ void draw_player(int x, int y, int direction)
 
     case 3: // Left
         al_draw_filled_triangle(x - 45, y, x - 20, y - 12, x - 20, y + 12, al_map_rgb(255, 60, 60));
+        break;
+
+    case 4: // Upper-left
+        al_draw_filled_triangle(x - 35, y - 35, x - 10, y - 25, x - 25, y - 10, al_map_rgb(255, 60, 60));
+        break;
+
+    case 5: // Lower-right
+        al_draw_filled_triangle(x + 35, y + 35, x + 10, y + 25, x + 25, y + 10, al_map_rgb(255, 60, 60));
+        break;
+
+    case 6: // Upper-right
+        al_draw_filled_triangle(x + 35, y - 35, x + 10, y - 25, x + 25, y - 10, al_map_rgb(255, 60, 60));
+        break;
+
+    case 7: // Lower-left
+        al_draw_filled_triangle(x - 35, y + 35, x - 10, y + 25, x - 25, y + 10, al_map_rgb(255, 60, 60));
         break;
     }
     // Center detail
