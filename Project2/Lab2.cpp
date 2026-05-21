@@ -22,6 +22,7 @@ int main(int argc, char** argv)
     int playerX = width / 2;
     int playerY = height / 2;
     int direction = 0;
+    int moveAmount = 25;
     bool done = false;
     display = al_create_display(width, height);
 
@@ -45,7 +46,7 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    event_queue = al_create_event_queue();
+    
     al_register_event_source(event_queue, al_get_keyboard_event_source());
     al_register_event_source(event_queue, al_get_display_event_source(display));
     al_init_primitives_addon();
@@ -66,14 +67,41 @@ int main(int argc, char** argv)
         }
         else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
         {
-            if (ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
+            switch (ev.keyboard.keycode)
             {
+            case ALLEGRO_KEY_ESCAPE:
                 done = true;
+                break;
+
+            case ALLEGRO_KEY_UP:
+                playerY -= moveAmount;
+                direction = 0;
+                break;
+
+            case ALLEGRO_KEY_DOWN:
+                playerY += moveAmount;
+                direction = 1;
+                break;
+
+            case ALLEGRO_KEY_RIGHT:
+                playerX += moveAmount;
+                direction = 2;
+                break;
+
+            case ALLEGRO_KEY_LEFT:
+                playerX -= moveAmount;
+                direction = 3;
+                break;
             }
+            draw_background();
+            draw_player(playerX, playerY, direction);
+
+
+            al_flip_display();
         }
     }
 
-
+    al_destroy_event_queue(event_queue);
     al_destroy_display(display);
 
     return 0;
@@ -91,9 +119,24 @@ void draw_player(int x, int y, int direction)
     al_draw_filled_circle(x, y, 25, al_map_rgb(0, 180, 255));
     al_draw_circle(x, y, 25, al_map_rgb(255, 255, 255), 2);
 
-    // Pointer facing up
-    al_draw_filled_triangle(x, y - 45, x - 12, y - 20, x + 12, y - 20, al_map_rgb(255, 60, 60));
+    // Pointer changing based on direction
+    switch (direction)
+    {
+    case 0://Up
+        al_draw_filled_triangle(x, y - 45, x - 12, y - 20, x + 12, y - 20, al_map_rgb(255, 60, 60));
+        break;
+    case 1: // Down
+        al_draw_filled_triangle(x, y + 45, x - 12, y + 20, x + 12, y + 20, al_map_rgb(255, 60, 60));
+        break;
 
+    case 2: // Right
+        al_draw_filled_triangle(x + 45, y, x + 20, y - 12, x + 20, y + 12, al_map_rgb(255, 60, 60));
+        break;
+
+    case 3: // Left
+        al_draw_filled_triangle(x - 45, y, x - 20, y - 12, x - 20, y + 12, al_map_rgb(255, 60, 60));
+        break;
+    }
     // Center detail
     al_draw_filled_circle(x, y, 8, al_map_rgb(255, 255, 255));
 }
