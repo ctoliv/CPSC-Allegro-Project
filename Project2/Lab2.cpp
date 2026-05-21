@@ -10,7 +10,7 @@ int main(int argc, char** argv)
 {
 
     ALLEGRO_DISPLAY* display = NULL;
-
+    ALLEGRO_EVENT_QUEUE* event_queue = NULL;
     if (!al_init())
     {
         fprintf(stderr, "failed to initialize allegro!\n");
@@ -22,6 +22,7 @@ int main(int argc, char** argv)
     int playerX = width / 2;
     int playerY = height / 2;
     int direction = 0;
+    bool done = false;
     display = al_create_display(width, height);
 
     if (!display)
@@ -30,15 +31,48 @@ int main(int argc, char** argv)
         return -1;
     }
 
+    if (!al_install_keyboard())
+    {
+        fprintf(stderr, "failed to install keyboard!\n");
+        return -1;
+    }
+
+    event_queue = al_create_event_queue();
+
+    if (!event_queue)
+    {
+        fprintf(stderr, "failed to create event queue!\n");
+        return -1;
+    }
+
+    event_queue = al_create_event_queue();
+    al_register_event_source(event_queue, al_get_keyboard_event_source());
+    al_register_event_source(event_queue, al_get_display_event_source(display));
     al_init_primitives_addon();
 
     draw_background();
     draw_player(playerX, playerY, direction);
 
-    
-    al_flip_display();
 
-    al_rest(5.0);
+    al_flip_display();
+    while (!done)
+    {
+        ALLEGRO_EVENT ev;
+        al_wait_for_event(event_queue, &ev);
+
+        if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+        {
+            done = true;
+        }
+        else if (ev.type == ALLEGRO_EVENT_KEY_DOWN)
+        {
+            if (ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
+            {
+                done = true;
+            }
+        }
+    }
+
 
     al_destroy_display(display);
 
